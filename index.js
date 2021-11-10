@@ -23,13 +23,20 @@ async function run() {
     const servicesCollections = database.collection("HousePlantServices");
     const userCollections = database.collection("HousePlantUsers");
 
+    // products get method 
+    app.get("/services", async (req, res) => {
+      const cursor = servicesCollections.find({});
+      const services = await cursor.toArray();
+      res.send(services);
+    });
 
-    app.get('/services', async(req,res) => {
-        const cursor = servicesCollections.find({})
-        const services = await cursor.toArray()
-        res.send(services)
-    })
-    
+    // users post method 
+    app.post("/users", async (req, res) => {
+      const data = req.body;
+      console.log(data);
+      const result = await userCollections.insertOne(data);
+      res.json();
+    });
   } finally {
     // client.close();
   }
