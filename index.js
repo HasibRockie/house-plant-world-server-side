@@ -93,6 +93,20 @@ async function run() {
       res.json();
     });
 
+    // users put method
+    app.put("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const data = req.body;
+      const filter = { email: email };
+      const updateDoc = {
+        $set: {
+          role: "admin",
+        },
+      };
+      const result = await userCollections.updateOne(filter,updateDoc);
+      res.json(result);
+    });
+
     // users get method
     app.get("/users", async (req, res) => {
       const cursor = userCollections.find({});
