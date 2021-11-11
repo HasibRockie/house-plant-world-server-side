@@ -54,8 +54,22 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await ordersCollections.deleteOne(query);
+      res.json(result);
+    });
+
+    // order put method
+    app.put("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: "approved",
+        },
+      };
+      const result = await movies.updateOne(filter, updateDoc, options);
       console.log(result);
-      res.json(result)
+      res.json(result);
     });
 
     // users post method
