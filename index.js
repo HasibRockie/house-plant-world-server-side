@@ -23,6 +23,7 @@ async function run() {
     const servicesCollections = database.collection("HousePlantServices");
     const userCollections = database.collection("HousePlantUsers");
     const reviewCollections = database.collection("HousePlantReviews");
+    const ordersCollections = database.collection("HousePlantOrders");
 
     // products get method
     app.get("/services", async (req, res) => {
@@ -31,18 +32,32 @@ async function run() {
       res.send(services);
     });
 
+    // products get method by query
+    app.get("/service", async (req, res) => {
+      const id = req.query._id;
+      const query = { _id: ObjectId(id) };
+      const service = await servicesCollections.findOne(query);
+      res.send(service);
+    });
+
     // users post method
     app.post("/users", async (req, res) => {
       const data = req.body;
       const result = await userCollections.insertOne(data);
       res.json();
     });
- 
+
     // reviews post method
     app.post("/reviews", async (req, res) => {
       const data = req.body;
-      console.log(data);
       const result = await reviewCollections.insertOne(data);
+      res.json();
+    });
+
+    // orders post method
+    app.post("/orders", async (req, res) => {
+      const data = req.body;
+      const result = await ordersCollections.insertOne(data);
       res.json();
     });
 
@@ -60,6 +75,13 @@ async function run() {
       res.send(reviews);
     });
 
+    // orders get method
+    app.get("/orders", async (req, res) => {
+      const cursor = ordersCollections.find({});
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
+ 
     // users get by email query
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
@@ -72,7 +94,7 @@ async function run() {
   }
 }
 
-run().catch(console.log("something error"));
+run().catch(console.dir);
 
 app.get("/", (req, res) => {
   res.send("HOUSEPLANT Server is running");
