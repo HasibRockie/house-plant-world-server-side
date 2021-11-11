@@ -40,6 +40,24 @@ async function run() {
       res.send(service);
     });
 
+    // order get method by query
+    app.get("/order", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const order = ordersCollections.find(query);
+      const result = await order.toArray();
+      res.send(result);
+    });
+
+    // order delete method
+    app.delete("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await ordersCollections.deleteOne(query);
+      console.log(result);
+      res.json(result)
+    });
+
     // users post method
     app.post("/users", async (req, res) => {
       const data = req.body;
@@ -81,7 +99,7 @@ async function run() {
       const orders = await cursor.toArray();
       res.send(orders);
     });
- 
+
     // users get by email query
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
