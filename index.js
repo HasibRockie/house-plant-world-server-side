@@ -57,6 +57,14 @@ async function run() {
       res.json(result);
     });
 
+    // products delete method
+    app.delete("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await servicesCollections.deleteOne(query);
+      res.json(result);
+    });
+
     // order put method
     app.put("/orders/:id", async (req, res) => {
       const id = req.params.id;
@@ -76,6 +84,13 @@ async function run() {
     app.post("/users", async (req, res) => {
       const data = req.body;
       const result = await userCollections.insertOne(data);
+      res.json();
+    });
+
+    // products post method
+    app.post("/services", async (req, res) => {
+      const data = req.body;
+      const result = await servicesCollections.insertOne(data);
       res.json();
     });
 
